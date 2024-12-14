@@ -2,11 +2,9 @@
 require_once 'lib/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   // Ambil input email dan password
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-   // Query untuk memeriksa email dan password di database
     $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
     $result = mysqli_query($conn, $query);
 
@@ -19,11 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ?page=campaigns");
         exit();
     } else {
-       // Login gagal
         $error = "Email atau password salah!";
     }
 
-   // Tutup koneksi
     mysqli_close($conn);
 }
 ?>

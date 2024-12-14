@@ -2,32 +2,31 @@
 require_once 'lib/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   // Ambil input email dan password
+    $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-   // Query untuk memeriksa email dan password di database
-    $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-    $result = mysqli_query($conn, $query);
+    $cek_email = "SELECT * FROM users WHERE email = '$email'";
+    $result_email = mysqli_query($conn, $cek_email);
 
-    if (mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-        session_start();
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'];
-        
-        header("Location: ?page=campaigns");
-        exit();
+    $cek_username = "SELECT * FROM users WHERE username = '$username'";
+    $result_username = mysqli_query($conn, $cek_username);
+
+    if (mysqli_num_rows($result_email) > 0) {
+        $error = "Email sudah terdaftar!";
+    } elseif (mysqli_num_rows($result_username) > 0) {
+        $error = "Username sudah digunakan!";
     } else {
-       // Login gagal
-        $error = "Email atau password salah!";
+        $query = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
+        
+        if (mysqli_query($conn, $query)) {
+            $success = "Registrasi berhasil! Silakan login.";
+        } else {
+            $error = "Registrasi gagal: " . mysqli_error($conn);
+        }
     }
-
-   // Tutup koneksi
-    mysqli_close($conn);
 }
 ?>
-
 
 <form method="post" class="p-4">
     <h2 class="mb-4 text-center">Create Account</h2>
