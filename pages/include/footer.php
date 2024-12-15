@@ -52,7 +52,7 @@
 <body>
 <nav class="navbar fixed-bottom custom-bottom-navbar">
     <div class="container-fluid d-flex justify-content-around align-items-center">
-        <a href="index.php?page=home" class="nav-item">
+        <a href="index.php?page=campaigns" class="nav-item">
             <i class="bi bi-house-door"></i>
             <p>Beranda</p>
         </a>

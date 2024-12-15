@@ -1,6 +1,13 @@
 <?php
 if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
+require "include/footer.php";
 ?>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Kita Bantu</a>
@@ -64,7 +71,6 @@ if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
     function redirectToDetail(campaignId) {
         window.location.href = '?page=campaign-detail&id=' + campaignId;
     }
-
 </script>
 
 <style>
@@ -131,7 +137,8 @@ if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
     }
 
     /* Donation and Days Remaining */
-    .campaign-raised, .campaign-days {
+    .campaign-raised,
+    .campaign-days {
         font-size: 0.85rem;
         text-align: center;
     }
