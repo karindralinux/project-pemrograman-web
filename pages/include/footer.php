@@ -10,12 +10,15 @@
     <style>
     .custom-bottom-navbar {
         position: fixed;
-        left: 30.4%;
-        width: 600px;
-        height: 10vh;
+        max-width: 600px;
+        width: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* height: 10vh; */
+        bottom: -10vh;
         background-color: #f8f9fa;
         border-top: 1px solid #e0e0e0;
-        display: flex;
+        display: flex;  
         align-items: center;
         justify-content: center;
         z-index: 1030;
