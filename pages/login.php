@@ -1,26 +1,43 @@
 <?php
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!(!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true)) {
+    header("Location: ?page=campaigns");
+}
+
 require_once 'lib/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-    $result = mysqli_query($conn, $query);
+    // Query untuk mendapatkan user dari database
+    $query = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-        session_start();
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['email'] = $user['email'];
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
 
-        header("Location: ?page=campaigns");
-        exit();
+        // Verifikasi password
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['authenticated'] = true;
+            $_SESSION['email'] = $email;
+            header("Location: ?page=campaigns");
+            exit();
+        } else {
+            $error = 'Email atau password salah.';
+        }
+
     } else {
-        $error = "Email atau password salah!";
+        $error = 'Email atau password salah.';
     }
 
-    mysqli_close($conn);
 }
 ?>
 

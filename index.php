@@ -11,7 +11,7 @@
 
         $isAuthenticated = !(!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true);
         $title =  $_GET['page'] ?? 'KitaBantu';
-        echo $title;
+        echo 'Kita Bantu | ' . ucfirst($title);
         ?>
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -64,13 +64,11 @@
             return;
         }
 
-        $guestPages = ['login', 'register', 'home', 'campaigns', 'campaign-detail'];
+        $guestPages = ['login', 'register'];
 
         if (!$isAuthenticated && !in_array($page, $guestPages)) {
             echo '<div class="alert alert-warning" role="alert">Anda belum login. Silakan login terlebih dahulu. <a href="?page=login" class="btn btn-primary btn-sm ms-2">Login</a></div>';
             exit();
-        } else if ($isAuthenticated && $page == 'login') {
-            $page_to_open = "pages/home.php";
         }
 
 

@@ -1,4 +1,13 @@
 <?php
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!(!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true)) {
+    header("Location: ?page=campaigns");
+}
+
 require_once 'lib/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -6,23 +15,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $cek_email = "SELECT * FROM users WHERE email = '$email'";
-    $result_email = mysqli_query($conn, $cek_email);
+    // Cek email menggunakan prepared statement
+    $stmt_email = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt_email->bind_param("s", $email);
+    $stmt_email->execute();
+    $result_email = $stmt_email->get_result();
 
-    $cek_username = "SELECT * FROM users WHERE username = '$username'";
-    $result_username = mysqli_query($conn, $cek_username);
+    // Cek username menggunakan prepared statement
+    $stmt_username = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt_username->bind_param("s", $username);
+    $stmt_username->execute();
+    $result_username = $stmt_username->get_result();
 
-    if (mysqli_num_rows($result_email) > 0) {
+    if ($result_email->num_rows > 0) {
         $error = "Email sudah terdaftar!";
-    } elseif (mysqli_num_rows($result_username) > 0) {
+    } elseif ($result_username->num_rows > 0) {
         $error = "Username sudah digunakan!";
     } else {
-        $query = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
-        
-        if (mysqli_query($conn, $query)) {
+        // Hash password sebelum disimpan
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+        // Insert data menggunakan prepared statement
+        $stmt_insert = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+        $stmt_insert->bind_param("sss", $username, $email, $hashed_password);
+
+        if ($stmt_insert->execute()) {
             $success = "Registrasi berhasil! Silakan login.";
         } else {
-            $error = "Registrasi gagal: " . mysqli_error($conn);
+            $error = "Registrasi gagal: " . $stmt_insert->error;
         }
     }
 }
