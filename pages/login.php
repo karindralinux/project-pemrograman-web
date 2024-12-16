@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verifikasi password
         if (password_verify($password, $user['password'])) {
             $_SESSION['authenticated'] = true;
+            $_SESSION['username'] = $user['username'];
             $_SESSION['email'] = $email;
             $_SESSION['user_id'] = $user['id'];
             
