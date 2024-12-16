@@ -27,10 +27,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $is_anonim = isset($_POST['is_anonim']) ? 1 : 0;
 
     // Simpan ke database
-    $query = "INSERT INTO donasi (id_user, id_campaign, jumlah_donasi, metode_pembayaran, pesan, is_anonim, status)
-              VALUES (?, ?, ?, ?, ?, ?, 'pending')";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("iiissi", $id_user, $id_campaign, $jumlah_donasi, $metode_pembayaran, $pesan, $is_anonim);
+    $conn->begin_transaction();
+
+    try {
+        $query = "INSERT INTO donasi (id_user, id_campaign, jumlah_donasi, metode_pembayaran, pesan, is_anonim, status)
+                  VALUES (?, ?, ?, ?, ?, ?, 'pending')";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iiissi", $id_user, $id_campaign, $jumlah_donasi, $metode_pembayaran, $pesan, $is_anonim);
+        $stmt->execute();
+
+        // Update raised_amount di tabel campaigns
+        $updateQuery = "UPDATE campaigns SET raised_amount = raised_amount + ? WHERE id = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param("ii", $jumlah_donasi, $id_campaign);
+        $updateStmt->execute();
+
+        $conn->commit();
+    } catch (Exception $e) {
+        $conn->rollback();
+        echo "<script>alert('Terjadi kesalahan saat menyimpan donasi.');</script>";
+    }
 
     if ($stmt->execute()) {
         echo "<script>alert('Donasi berhasil disimpan!'); window.location.href = '?page=donasiSaya';</script>";
