@@ -22,14 +22,22 @@ $user = $result->fetch_assoc();
 
 $id_user = $user['id'];
 
-$query = "SELECT d.id AS id_donasi, c.title AS title, c.image_url, d.jumlah_donasi, d.metode_pembayaran,
-            d.pesan, d.is_anonim, d.status, d.created_at FROM donasi d JOIN campaigns c ON d.id_campaign = c.id WHERE d.id_user = ? ORDER BY d.created_at DESC";
+$search = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
 
-// $query = "SELECT c.title, c.description, c.goal_amount AS dana_target, c.raised_amount AS dana_terkumpul FROM campaigns c WHERE c.id = ?";
+$query = "SELECT d.id AS id_donasi, c.title AS title, c.image_url, d.jumlah_donasi, d.metode_pembayaran,
+            d.pesan, d.is_anonim, d.status, d.created_at 
+          FROM donasi d 
+          JOIN campaigns c ON d.id_campaign = c.id 
+          WHERE d.id_user = ? AND c.title LIKE ? 
+          ORDER BY d.created_at DESC";
+
+// $query = "SELECT d.id AS id_donasi, c.title AS title, c.image_url, d.jumlah_donasi, d.metode_pembayaran,
+//             d.pesan, d.is_anonim, d.status, d.created_at FROM donasi d JOIN campaigns c ON d.id_campaign = c.id WHERE d.id_user = ? ORDER BY d.created_at DESC";
+
 
 
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $id_user);
+$stmt->bind_param("is", $id_user, $search);
 $stmt->execute();
 $donasiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -67,69 +75,57 @@ $donasiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 <div class="nav-atas">
     <h2 class="mb-4 text-center fw-bold">Riwayat Donasi Saya</h2>
+    
+
+
+    <form method="GET" action="" class="d-flex justify-content-center mb-4">
+        <input type="hidden" name="page" value="donasiSaya">
+        <input type="text" name="search" class="form-control w-50" placeholder="Cari berdasarkan nama campaign..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+        <button type="submit" class="btn btn-primary ms-2">Cari</button>
+    </form>
+    
+
+    
     <div class="kategori d-flex justify-content-center gap-3">
         Kategori : 
         <p class="card-text ">
-            <span class="badge badge-pill bg-success">
-                Berhasil
-            </span>
+            <span class="badge badge-pill bg-success">Berhasil</span>
         </p>
         <p class="card-text ">
-            <span class="badge badge-pill bg-warning">
-                Pending
-            </span>
+            <span class="badge badge-pill bg-warning">Pending</span>
         </p>
         <p class="card-text ">
-            <span class="badge badge-pill bg-danger">
-                Gagal
-            </span>
+            <span class="badge badge-pill bg-danger">Gagal</span>
         </p>
     </div>
 </div>
 
 <div class="container mt-4 header-donasi">
-
-
     <?php if (empty($donasiList)): ?>
         <div class="alert alert-info text-center">
-            <p>Anda belum pernah melakukan donasi.</p>
+            <p>
+                <?php if (isset($_GET['search']) && $_GET['search'] !== ''): ?>
+                    Tidak ditemukan hasil untuk "<strong><?= htmlspecialchars($_GET['search']) ?></strong>".
+                <?php else: ?>
+                    Anda belum pernah melakukan donasi.
+                <?php endif; ?>
+            </p>
         </div>
     <?php else: ?>
         <div class="row">
             <?php foreach ($donasiList as $donasi): ?>
                 <div class="col-md-6 col-lg-6  mb-4">
                     <div class="card h-100">
-
-                        <img
-                            src="<?php echo htmlspecialchars($donasi['image_url']); ?>"
-                            class="card-img-top"
-                            alt="<?= htmlspecialchars($donasi['title']) ?>">
-                        <!-- <h1><?php echo htmlspecialchars($donasi['image_url']); ?></h1> -->
-
+                        <img src="<?= htmlspecialchars($donasi['image_url']); ?>" class="card-img-top" alt="<?= htmlspecialchars($donasi['title']) ?>">
                         <div class="card-body">
-
                             <h5 class="card-title"><?= htmlspecialchars($donasi['title']) ?></h5>
-
-                            <?php if (!empty($donasi['pesan'])): ?>
-                                <p class="card-text text-muted">
-                                    <em>"<?= htmlspecialchars($donasi['pesan']) ?>"</em>
-                                </p>
-                            <?php endif; ?>
-
-                            <!-- jumlah donasinya -->
-                            <p class="card-text">
-                                <strong>Donasi:</strong> Rp<?= number_format($donasi['jumlah_donasi'], 0, ',', '.') ?>
-                            </p>
-
-                            <!-- stauts -->
-                            <p class="card-text">
-                                <strong>Status:</strong>
+                            <p class="card-text"><strong>Donasi:</strong> Rp<?= number_format($donasi['jumlah_donasi'], 0, ',', '.') ?></p>
+                            <p class="card-text"><strong>Status:</strong> 
                                 <span class="badge bg-<?= $donasi['status'] === 'success' ? 'success' : ($donasi['status'] === 'pending' ? 'warning' : 'danger') ?>">
                                     <?= ucfirst($donasi['status']) ?>
                                 </span>
                             </p>
                         </div>
-
                         <div class="card-footer">
                             <small class="text-muted">Tanggal Donasi: <?= date('d M Y, H:i', strtotime($donasi['created_at'])) ?></small>
                         </div>
