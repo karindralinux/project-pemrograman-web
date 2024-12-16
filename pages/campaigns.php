@@ -2,6 +2,7 @@
 if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
 
 require_once('lib/koneksi.php');
+require "include/footer.php";
 
 $limit = 5; // Jumlah data per halaman
 $currentPage = isset($_GET['currentPage']) ? (int)$_GET['currentPage'] : 1;
