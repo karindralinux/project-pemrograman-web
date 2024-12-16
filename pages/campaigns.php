@@ -22,10 +22,18 @@ $totalPages = ceil($total / $limit);
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Kita Bantu</a>
         <div class="d-flex">
-            <a href="?page=logout"><button id="logoutBtn" class="btn btn-secondary">Logout</button></a>
+            <!-- Tombol untuk Buat Campaign Donasi -->
+            <a href="?page=form_campaign">
+                <button id="createCampaignBtn" class="btn btn-primary me-2">Buat Campaign</button>
+            </a>
+            <!-- Tombol Logout -->
+            <a href="?page=logout">
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </a>
         </div>
     </div>
 </nav>
+
 <div class="container mt-4">
     <div class="d-flex flex-column">
         <?php
