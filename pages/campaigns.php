@@ -17,19 +17,11 @@ $campaigns = $stmt->get_result();
 $total = $conn->query("SELECT COUNT(*) as total FROM campaigns")->fetch_assoc()['total'];
 $totalPages = ceil($total / $limit);
 
+require "include/navbar.php";
 
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Kita Bantu</a>
-        <div class="d-flex">
-            <!-- Tombol Logout -->
-            <a href="?page=logout">
-                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
-            </a>
-        </div>
-    </div>
-</nav>
+
+
 
 <div class="container mt-4">
     <div class="d-flex flex-column">

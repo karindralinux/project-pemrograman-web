@@ -32,6 +32,9 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id_user);
 $stmt->execute();
 $donasiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+require "include/navbar.php";
+
 ?>
 
 <style>
