@@ -1,6 +1,14 @@
 <?php
 if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!(!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true)) {
+    header("Location: ?page=campaigns");
+}
+
 ?>
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="text-center">
