@@ -22,8 +22,11 @@ $user = $result->fetch_assoc();
 
 $id_user = $user['id'];
 
-$query = "SELECT d.id AS id_donasi, c.nama AS nama_campaign, c.foto, d.jumlah_donasi, d.metode_pembayaran,
-            d.pesan, d.is_anonim, d.status, d.created_at FROM donasi d JOIN campaign c ON d.id_campaign = c.id WHERE d.id_user = ? ORDER BY d.created_at DESC";
+$query = "SELECT d.id AS id_donasi, c.title AS title, c.image_url, d.jumlah_donasi, d.metode_pembayaran,
+            d.pesan, d.is_anonim, d.status, d.created_at FROM donasi d JOIN campaigns c ON d.id_campaign = c.id WHERE d.id_user = ? ORDER BY d.created_at DESC";
+
+// $query = "SELECT c.title, c.description, c.goal_amount AS dana_target, c.raised_amount AS dana_terkumpul FROM campaigns c WHERE c.id = ?";
+
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id_user);
@@ -58,7 +61,7 @@ $donasiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 <div class="container mt-4">
     <h2 class="mb-4 text-center">Riwayat Donasi Saya</h2>
-
+    
     <?php if (empty($donasiList)): ?>
         <div class="alert alert-info text-center">
             <p>Anda belum pernah melakukan donasi.</p>
@@ -70,13 +73,14 @@ $donasiList = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     <div class="card h-100">
                         
                         <img 
-                            src="<?= !empty($donasi['foto']) ? $donasi['foto'] : 'https://via.placeholder.com/400x200?text=No+Image' ?>" 
+                            src="<?php echo htmlspecialchars($donasi['image_url']); ?>" 
                             class="card-img-top" 
-                            alt="<?= htmlspecialchars($donasi['nama_campaign']) ?>">
+                            alt="<?= htmlspecialchars($donasi['title']) ?>">
+                            <!-- <h1><?php echo htmlspecialchars($donasi['image_url']); ?></h1> -->
                         
                         <div class="card-body">
                             
-                            <h5 class="card-title"><?= htmlspecialchars($donasi['nama_campaign']) ?></h5>
+                            <h5 class="card-title"><?= htmlspecialchars($donasi['title']) ?></h5>
 
                             <?php if (!empty($donasi['pesan'])): ?>
                                 <p class="card-text text-muted">

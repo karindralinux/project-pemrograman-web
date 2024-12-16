@@ -15,7 +15,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         /* height: 10vh; */
-        bottom: -10vh;
+        bottom: -10%;
         background-color: #f8f9fa;
         border-top: 1px solid #e0e0e0;
         display: flex;  
