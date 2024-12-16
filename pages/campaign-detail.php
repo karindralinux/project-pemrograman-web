@@ -1,7 +1,6 @@
 <?php
 if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
-
-require "include/footer.php";
+require "include/footer.php"
 ?>
 <div class="campaign-detail-card">
     <!-- Header Image -->

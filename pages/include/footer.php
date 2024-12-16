@@ -56,7 +56,7 @@
             <i class="bi bi-house-door"></i>
             <p>Beranda</p>
         </a>
-        <a href="index.php?page=donasi-saya" class="nav-item">
+        <a href="index.php?page=donasiSaya" class="nav-item">
             <i class="bi bi-heart"></i>
             <p>Donasi Saya</p>
         </a>
