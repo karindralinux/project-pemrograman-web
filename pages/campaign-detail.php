@@ -50,5 +50,5 @@ $progress = ceil(($campaign['raised_amount'] / $campaign['goal_amount']) * 100);
     <p><?php echo nl2br(htmlspecialchars($campaign['description'])); ?></p>
 </div>
 <div class="text-center mt-4">
-    <a href="#" class="btn btn-primary btn-lg w-100">Donasi</a>
+    <a href="?page=formDonasi&id=<?php echo $campaignId; ?>" class="btn btn-primary btn-lg w-100">Donasi</a>
 </div>

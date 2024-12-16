@@ -3,17 +3,11 @@ if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
 
 require_once "lib/koneksi.php";
 
-session_start();
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-    header("Location: ?page=login");
-    exit();
-}
-
 // Ambil ID Campaign dari URL
 $id_campaign = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Ambil detail kampanye dari database
-$query = "SELECT id, nama, deskripsi, dana_target, dana_terkumpul FROM campaign WHERE id = ?";
+$query = "SELECT * FROM campaigns WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id_campaign);
 $stmt->execute();
@@ -51,10 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Detail Kampanye -->
     <div class="campaign-detail mb-4 p-4 border rounded">
-        <h4><?= htmlspecialchars($campaign['nama']) ?></h4>
-        <p><?= htmlspecialchars($campaign['deskripsi']) ?></p>
-        <p><strong>Target:</strong> Rp<?= number_format($campaign['dana_target'], 0, ',', '.') ?></p>
-        <p><strong>Terkumpul:</strong> Rp<?= number_format($campaign['dana_terkumpul'], 0, ',', '.') ?></p>
+        <h4><?= htmlspecialchars($campaign['title']) ?></h4>
+        <p><?= htmlspecialchars($campaign['description']) ?></p>
+        <p><strong>Target:</strong> Rp<?= number_format($campaign['goal_amount'], 0, ',', '.') ?></p>
+        <p><strong>Terkumpul:</strong> Rp<?= number_format($campaign['raised_amount'], 0, ',', '.') ?></p>
     </div>
 
     <!-- Form Donasi -->

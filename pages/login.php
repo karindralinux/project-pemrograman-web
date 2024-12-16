@@ -28,6 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['password'])) {
             $_SESSION['authenticated'] = true;
             $_SESSION['email'] = $email;
+            $_SESSION['user_id'] = $user['id'];
+            
             header("Location: ?page=campaigns");
             exit();
         } else {
