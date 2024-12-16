@@ -52,19 +52,19 @@
 <body>
 <nav class="navbar fixed-bottom custom-bottom-navbar">
     <div class="container-fluid d-flex justify-content-around align-items-center">
-        <a href="index.php?page=campaigns" class="nav-item">
+        <a href="?page=campaigns" class="nav-item">
             <i class="bi bi-house-door"></i>
             <p>Beranda</p>
         </a>
-        <a href="index.php?page=donasiSaya" class="nav-item">
+        <a href="?page=donasiSaya" class="nav-item">
             <i class="bi bi-heart"></i>
             <p>Donasi Saya</p>
         </a>
-        <a href="index.php?page=galang-dana" class="nav-item">
+        <a href="?page=form_campaign" class="nav-item">
             <i class="bi bi-plus-circle"></i>
             <p>Galang Dana</p>
         </a>
-        <a href="index.php?page=profile" class="nav-item">
+        <a href="?page=profile" class="nav-item">
             <i class="bi bi-person"></i>
             <p>Profil</p>
         </a>
