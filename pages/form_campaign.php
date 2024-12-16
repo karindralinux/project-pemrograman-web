@@ -49,7 +49,7 @@ $campaigners = $conn->query("SELECT id, organization_name FROM campaigners");
     <title>Buat Campaign Baru</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body style="background-color:rgb(10, 53, 90);">
+<body style="background-color:rgb(255, 255, 255);">
 
         <!-- Tombol Kembali -->
         <a href="?page=campaigns" class="btn btn-outline-secondary mb-3">
@@ -60,7 +60,7 @@ $campaigners = $conn->query("SELECT id, organization_name FROM campaigners");
         </a>
 
         <h2 class="mb-4 text-center">Buat Campaign Baru</h2>
-        <form method="POST" action="" style="background-color:rgb(14, 147, 209); padding: 20px; border-radius: 10px;">
+        <form method="POST" action="" style="background-color:rgb(233, 225, 225); padding: 20px; border-radius: 10px;">
             <div class="mb-3">
                 <label for="title" class="form-label fw-bold">Judul Kampanye</label>
                 <input type="text" class="form-control" id="title" name="title" required>
