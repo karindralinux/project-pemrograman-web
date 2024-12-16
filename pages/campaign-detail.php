@@ -3,6 +3,7 @@
 if (defined("LEWAT_INDEX") == false) die("Tidak boleh akses langsung!");
 
 require_once('lib/koneksi.php');
+require "include/footer.php";
 
 // Ambil ID campaign dari parameter URL
 $campaignId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
